@@ -87,3 +87,59 @@ const cardNumberPattern = {
 }
 
 const cardNumberMasked = IMask(cardNumber, cardNumberPattern)
+
+// Evento para adicionar o cartão com o button
+const addButton = document.querySelector("#add-card")
+addButton.addEventListener("click", () => {
+  alert("cartão adicionado!")
+})
+
+// Evento para bloquear atualização da página (form) ao clicar o button
+document.querySelector("form").addEventListener("submit", (event) => {
+  event.preventDefault()
+})
+
+// Evento para adicionar texto (nome) no Nome do titular
+const cardHolder = document.querySelector("#card-holder")
+cardHolder.addEventListener("input", () => {
+  const ccHolder = document.querySelector(".cc-holder .value")
+
+  // Ternário caso o não haja texto exibir nome padrão para sugerir ao usuário
+  // Caso o usuário digite algum nome, exibi-lo
+  ccHolder.innerText =
+    cardHolder.value.length == 0 ? "FULANO DA SILVA" : cardHolder.value
+})
+
+// Observa o security code, quando aceito pelo IMask, atualiza o valor mostrado
+securityCodeMasked.on("accept", () => {
+  updateSecurityCode(securityCodeMasked.value)
+})
+
+// Ternário para exibir o valor padrão (123) caso o usuário não insira outro valor
+// Função chamada na função anterior
+function updateSecurityCode(code) {
+  const ccSecurity = document.querySelector(".cc-security .value")
+
+  ccSecurity.innerText = code.length === 0 ? "123" : code
+}
+
+cardNumberMasked.on("accept", () => {
+  const cardType = cardNumberMasked.masked.currentMask.cardtype
+  setCardType(cardType)
+  updateCardNumber(cardNumberMasked.value)
+})
+
+function updateCardNumber(number) {
+  const ccNumber = document.querySelector(".cc-number")
+
+  ccNumber.innerText = number.length === 0 ? "1234 5678 9012 3456" : number
+}
+
+expirationDateMasked.on("accept", () => {
+  updateExpirationDate(expirationDateMasked.value)
+})
+
+function updateExpirationDate(date) {
+  const ccExppiration = document.querySelector(".cc-extra .value")
+  ccExppiration.innerText = date.length == 0 ? "02/32" : date
+}
